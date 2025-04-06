@@ -8,164 +8,126 @@ const progress = document.getElementById("progress");
 const progressContainer = document.getElementById("progress-container");
 const title = document.getElementById("title");
 const cover = document.getElementById("cover");
-const currTime = document.querySelector("#currTime");
-const durTime = document.querySelector("#durTime");
+const currTime = document.getElementById("currTime");
+const durTime = document.getElementById("durTime");
 
-// Song titles
-const songs = ["badguys"];
+// Songs
+const songs = ["badguys", "running", "he is not me"];
+let songIndex = 2;
 
-// Keep track of song
-let songIndex = 0;
-
-// Initially load song details into DOM
+// Load initial song
 loadSong(songs[songIndex]);
 
-// Update song details
 function loadSong(song) {
   title.innerText = song;
-  audio.src = `music/${song}.mp3`;
+  audio.src = `music/${song}.wav`;
   cover.src = `images/${song}.jpg`;
 }
 
-// Play song
+// Play / Pause
 function playSong() {
   musicContainer.classList.add("play");
-  playBtn.querySelector("i.fas").classList.remove("fa-play");
-  playBtn.querySelector("i.fas").classList.add("fa-pause");
-
-  audio.play();
+  playBtn.querySelector("i.fas").classList.replace("fa-play", "fa-pause");
+  audio.play().catch((err) => console.error("Playback failed:", err));
 }
 
-// Pause song
 function pauseSong() {
   musicContainer.classList.remove("play");
-  playBtn.querySelector("i.fas").classList.add("fa-play");
-  playBtn.querySelector("i.fas").classList.remove("fa-pause");
-
+  playBtn.querySelector("i.fas").classList.replace("fa-pause", "fa-play");
   audio.pause();
 }
 
-// Previous song
 function prevSong() {
-  songIndex--;
-
-  if (songIndex < 0) {
-    songIndex = songs.length - 1;
-  }
-
+  songIndex = (songIndex - 1 + songs.length) % songs.length;
   loadSong(songs[songIndex]);
-
   playSong();
 }
 
-// Next song
 function nextSong() {
-  songIndex++;
-
-  if (songIndex > songs.length - 1) {
-    songIndex = 0;
-  }
-
+  songIndex = (songIndex + 1) % songs.length;
   loadSong(songs[songIndex]);
-
   playSong();
 }
 
-// Update progress bar
 function updateProgress(e) {
   const { duration, currentTime } = e.srcElement;
   const progressPercent = (currentTime / duration) * 100;
   progress.style.width = `${progressPercent}%`;
 }
 
-// Set progress bar
 function setProgress(e) {
   const width = this.clientWidth;
   const clickX = e.offsetX;
   const duration = audio.duration;
-
   audio.currentTime = (clickX / width) * duration;
 }
 
-//get duration & currentTime for Time of song
-function DurTime(e) {
+function formatTime(seconds) {
+  const min = Math.floor(seconds / 60);
+  const sec = Math.floor(seconds % 60);
+  return `${min < 10 ? "0" + min : min}:${sec < 10 ? "0" + sec : sec}`;
+}
+
+function updateTime(e) {
   const { duration, currentTime } = e.srcElement;
-  var sec;
-  var sec_d;
+  currTime.innerText = formatTime(currentTime);
+  durTime.innerText = isNaN(duration) ? "00:00" : formatTime(duration);
+}
 
-  // define minutes currentTime
-  let min = currentTime == null ? 0 : Math.floor(currentTime / 60);
-  min = min < 10 ? "0" + min : min;
+// Visualizer
+const visualizerElem = document.createElement("canvas");
+visualizerElem.width = 640;
+visualizerElem.height = 150;
+musicContainer.appendChild(visualizerElem);
 
-  // define seconds currentTime
-  function get_sec(x) {
-    if (Math.floor(x) >= 60) {
-      for (var i = 1; i <= 60; i++) {
-        if (Math.floor(x) >= 60 * i && Math.floor(x) < 60 * (i + 1)) {
-          sec = Math.floor(x) - 60 * i;
-          sec = sec < 10 ? "0" + sec : sec;
-        }
-      }
-    } else {
-      sec = Math.floor(x);
-      sec = sec < 10 ? "0" + sec : sec;
+let audioContext = null;
+
+function createVisualizer() {
+  audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  const src = audioContext.createMediaElementSource(audio);
+  const analyzer = audioContext.createAnalyser();
+  const canvas = visualizerElem;
+  const ctx = canvas.getContext("2d");
+
+  src.connect(analyzer);
+  analyzer.connect(audioContext.destination);
+
+  analyzer.fftSize = 128;
+  const bufferLength = analyzer.frequencyBinCount;
+  const dataArray = new Uint8Array(bufferLength);
+  const barWidth = (canvas.width / bufferLength) * 2.5;
+
+  function renderFrame() {
+    requestAnimationFrame(renderFrame);
+
+    analyzer.getByteFrequencyData(dataArray);
+
+    ctx.fillStyle = "#000";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    let bar = 0;
+    for (let i = 0; i < bufferLength; i++) {
+      const barHeight = dataArray[i] - 75;
+      const r = barHeight + 25 * (i / bufferLength);
+      ctx.fillStyle = `rgb(${r}, 100, 50)`;
+      ctx.fillRect(bar, canvas.height - barHeight, barWidth, barHeight);
+      bar += barWidth + 2;
     }
   }
 
-  get_sec(currentTime, sec);
-
-  // change currentTime DOM
-  currTime.innerHTML = min + ":" + sec;
-
-  // define minutes duration
-  let min_d = isNaN(duration) === true ? "0" : Math.floor(duration / 60);
-  min_d = min_d < 10 ? "0" + min_d : min_d;
-
-  function get_sec_d(x) {
-    if (Math.floor(x) >= 60) {
-      for (var i = 1; i <= 60; i++) {
-        if (Math.floor(x) >= 60 * i && Math.floor(x) < 60 * (i + 1)) {
-          sec_d = Math.floor(x) - 60 * i;
-          sec_d = sec_d < 10 ? "0" + sec_d : sec_d;
-        }
-      }
-    } else {
-      sec_d = isNaN(duration) === true ? "0" : Math.floor(x);
-      sec_d = sec_d < 10 ? "0" + sec_d : sec_d;
-    }
-  }
-
-  // define seconds duration
-
-  get_sec_d(duration);
-
-  // change duration DOM
-  durTime.innerHTML = min_d + ":" + sec_d;
+  renderFrame();
 }
 
 // Event listeners
 playBtn.addEventListener("click", () => {
   const isPlaying = musicContainer.classList.contains("play");
-
-  if (isPlaying) {
-    pauseSong();
-  } else {
-    playSong();
-  }
+  if (!audioContext) createVisualizer();
+  isPlaying ? pauseSong() : playSong();
 });
 
-// Change song
 prevBtn.addEventListener("click", prevSong);
 nextBtn.addEventListener("click", nextSong);
-
-// Time/song update
 audio.addEventListener("timeupdate", updateProgress);
-
-// Click on progress bar
+audio.addEventListener("timeupdate", updateTime);
 progressContainer.addEventListener("click", setProgress);
-
-// Song ends
 audio.addEventListener("ended", nextSong);
-
-// Time of song
-audio.addEventListener("timeupdate", DurTime);
