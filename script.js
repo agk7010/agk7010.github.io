@@ -12,8 +12,16 @@ const currTime = document.getElementById("currTime");
 const durTime = document.getElementById("durTime");
 
 // Songs
-const songs = ["badguys", "running", "he is not me"];
-let songIndex = 2;
+const songs = [
+  "sxkwvs",
+  "chop go bing",
+  "he is not me",
+  "gone gone",
+  "ot7remix",
+  "vonoff1700 flip",
+  "digdatremix",
+];
+let songIndex = 5;
 
 // Load initial song
 loadSong(songs[songIndex]);
@@ -107,9 +115,9 @@ function createVisualizer() {
 
     let bar = 0;
     for (let i = 0; i < bufferLength; i++) {
-      const barHeight = dataArray[i] - 75;
+      const barHeight = dataArray[i] - 125;
       const r = barHeight + 25 * (i / bufferLength);
-      ctx.fillStyle = `rgb(${r}, 100, 50)`;
+      ctx.fillStyle = `rgb(${r}, 20, 50)`;
       ctx.fillRect(bar, canvas.height - barHeight, barWidth, barHeight);
       bar += barWidth + 2;
     }

@@ -5,7 +5,11 @@
 }
 
 body {
-  background-image: linear-gradient(0deg, #000000 23.8%, rgb(48, 109, 53) 92%);
+  background-image: linear-gradient(
+    0deg,
+    #ffffff 23.8%,
+    rgb(254, 147, 201) 92%
+  );
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -30,18 +34,6 @@ body {
   position: relative;
   width: 200px;
 }
-
-/* .img-container::after {
-  content: "";
-  background-color: #fff;
-  border-radius: 50%;
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  width: 20px;
-  height: 20px;
-  transform: translate(-50%, 50%);
-} */
 
 .img-container img {
   border-radius: 50%;
@@ -88,7 +80,7 @@ body {
 }
 
 .action-btn.action-btn-big {
-  color: #89bb9d;
+  color: #ff7cc6;
   font-size: 30px;
 }
 
