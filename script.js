@@ -13,13 +13,13 @@ const durTime = document.getElementById("durTime");
 
 // Songs
 const songs = [
-  "sxkwvs",
-  "chop go bing",
-  "he is not me",
-  "gone gone",
-  "ot7remix",
-  "vonoff1700 flip",
-  "digdatremix",
+  "lex - sxkwv",
+  "lex - chop go bing",
+  "lex - he is not me",
+  "lex ft. dex - gone gone",
+  "lex - ot7remix",
+  "lex - vonoff1700 flip",
+  "lex - digdatremix",
 ];
 let songIndex = 5;
 
