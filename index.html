@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+  <link rel="icon" type="image/x-icon" href="coolguy.jpg" />
   <head>
     <tt style="text-align: center">
        <meta charset="UTF-8" />
@@ -22,14 +23,20 @@
     >
       <div class="music-info">
         <h4 id="title"></h4>
+<!-- time progress -->
+        <h5 style="margin-top: 10px;">
+  <span id="currTime">00:00</span> / <span id="durTime">00:00</span>
+</h5>
+
         <div class="progress-container" id="progress-container">
           <div class="progress" id="progress"></div>
         </div>
       </div>
-      <audio src="music/chop go bing.wav" id="audio"></audio>
+      <audio src="music/lex - chop go bing.wav" id="audio"></audio>
       <div class="img-container">
-        <img src="images/chop go bing.jpg" alt="music-cover" id="cover" />
+        <img src="images/lex - chop go bing.jpg" alt="music-cover" id="cover" />
       </div>
+    
       <div class="navigation">
         <button id="prev" class="action-btn">
           <i class="fas fa-backward"></i>
@@ -40,6 +47,7 @@
         <button id="next" class="action-btn">
           <i class="fas fa-forward"></i>
         </button>
+        
       </div>
     </div>
     <script src="script.js"></script>

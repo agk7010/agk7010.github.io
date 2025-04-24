@@ -5,11 +5,7 @@
 }
 
 body {
-  background-image: linear-gradient(
-    0deg,
-    #ffffff 23.8%,
-    rgb(254, 147, 201) 92%
-  );
+  background-image: linear-gradient(0deg, #ffffff 23.8%, rgb(227, 98, 233) 92%);
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -116,7 +112,7 @@ body {
   border-radius: 5px;
   cursor: pointer;
   margin: 10px 0;
-  height: 4px;
+  height: 12px;
   width: 100%;
 }
 

@@ -13,7 +13,7 @@ const durTime = document.getElementById("durTime");
 
 // Songs
 const songs = [
-  "lex - sxkwv",
+  "lex - sxkwvs",
   "lex - chop go bing",
   "lex - he is not me",
   "lex ft. dex - gone gone",
@@ -21,7 +21,7 @@ const songs = [
   "lex - vonoff1700 flip",
   "lex - digdatremix",
 ];
-let songIndex = 5;
+let songIndex = 6;
 
 // Load initial song
 loadSong(songs[songIndex]);
@@ -58,7 +58,7 @@ function nextSong() {
 }
 
 function updateProgress(e) {
-  const { duration, currentTime } = e.srcElement;
+  const { duration, currentTime } = e.target;
   const progressPercent = (currentTime / duration) * 100;
   progress.style.width = `${progressPercent}%`;
 }
@@ -77,7 +77,7 @@ function formatTime(seconds) {
 }
 
 function updateTime(e) {
-  const { duration, currentTime } = e.srcElement;
+  const { duration, currentTime } = e.target;
   currTime.innerText = formatTime(currentTime);
   durTime.innerText = isNaN(duration) ? "00:00" : formatTime(duration);
 }
